@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import DuepayPaymentcard from './DuepayPaymentcard'; // Import the component
-import Colors from '@/constants/Colors';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+import DuepayPaymentcard from "./DuepayPaymentcard"; // Import the component
+import Colors from "@/constants/Colors";
 
 const PaymentDueScreen = () => {
   const [selectedFee, setSelectedFee] = useState(null); // Keeps track of selected fee
   const [buttonPressAnimation] = useState(new Animated.Value(1)); // Animation value
 
   const feeData = [
-    { amount: 1000, dueDate: '2024-03-10' },
-    { amount: 500, dueDate: '2024-04-15' },
-    { amount: 2000, dueDate: '2024-05-01' },
+    { amount: 1000, dueDate: "2024-03-10" },
+    { amount: 500, dueDate: "2024-04-15" },
+    { amount: 2000, dueDate: "2024-05-01" },
   ];
 
   const handleSelectFee = (amount) => {
@@ -36,7 +44,9 @@ const PaymentDueScreen = () => {
     });
   };
 
-  const buttonLabel = selectedFee ? `Proceed to pay ₹${selectedFee}` : 'Proceed to pay'; // Dynamically set button label
+  const buttonLabel = selectedFee
+    ? `Proceed to pay ₹${selectedFee}`
+    : "Proceed to pay"; // Dynamically set button label
 
   const alternateColors = [Colors.light, Colors.primary]; // Adjust colors as needed
   return (
@@ -77,25 +87,25 @@ export default PaymentDueScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4', // Background color for entire screen
+    backgroundColor: "#f4f4f4", // Background color for entire screen
   },
   button: {
     backgroundColor: Colors.danger,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    alignItems: 'center',
+    alignItems: "center",
 
-    marginBottom:30
+    marginBottom: 30,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   selectedFee: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10, // Adjust margin as needed
   },
 });
