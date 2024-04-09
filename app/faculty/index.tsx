@@ -188,7 +188,7 @@ const Index = () => {
             </View>
 
             <Drawer.Navigator
-                initialRouteName="Profile"
+                initialRouteName="notification"
                 drawerContentOptions={{
                     activeTintColor: Colors.red,
                     labelStyle: { fontSize: 16, fontWeight: "bold" },

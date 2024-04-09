@@ -266,7 +266,8 @@ const Assignment = () => {
         assignmentDescription,
         instituteClassId: selectedClass,
       };
-
+      console.log(body);
+      
       try {
         setLoadingSubmitting(true);
         const res = await instance.post(

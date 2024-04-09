@@ -30,7 +30,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
-import SectionedMultiSelect from "react-native-sectioned-multi-select";
+import SelectMultiple from 'react-native-select-multiple';
 import Footer from "@/components/footer";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
 
@@ -50,7 +50,7 @@ const notification = () => {
   const [file, setFile] = useState();
   const [loadingImage, setLoadingImage] = useState(false);
   const [loadingSubmitting, setLoadingSubmitting] = useState(false);
-
+  const [selectedValue, setSelectedValue] = useState(null);
   const getNotifications = async () => {
     try {
       setLoading(true);
@@ -159,9 +159,11 @@ const notification = () => {
       });
   };
 
-  const delete_assignment = async (item) => {
+  const delete_notification = async (item) => {
     try {
-      const res = await instance.delete(
+      console.log(item);
+      
+      const res = await instance.get(
         `/academic/notification/delete/${item?.notificationId}`,
         {
           headers: {
@@ -178,6 +180,11 @@ const notification = () => {
       ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
     }
   };
+  const onClassChange =(selectedClass)=>{
+    console.log(selectedClass);
+    
+    setSelectedClass(selectedClass);
+  }
   const handleSelect = (value) => {
     const newSelectedValues = [...selectedClass]; // Copy to avoid mutation
 
@@ -197,14 +204,19 @@ const notification = () => {
   };
   const submit = async () => {
     if (selectedClass && notificationTitle) {
+      const values = selectedClass.map(item => item.value);
+      console.log(values);
+      
       const body = {
+        createdBy:profile.userCode,
         notificationTitle: notificationTitle,
         fileLink: file,
         notificationType: notificationType,
         notificationBody: notificationBody,
-        groups: selectedClass,
+        groupId: values,
       };
-
+      console.log(body);
+      
       try {
         setLoadingSubmitting(true);
         const res = await instance.post("/academic/notification/", body, {
@@ -227,6 +239,7 @@ const notification = () => {
         await getNotifications();
       } catch (error) {
         setLoadingSubmitting(false);
+        ToastAndroid.show(error)
         ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
       }
     } else {
@@ -331,7 +344,7 @@ const notification = () => {
                       title="Delete"
                       color={Colors.red}
                       onPress={async () => {
-                        await delete_assignment(item);
+                        await delete_notification(item);
                       }}
                     />
                   </View>
@@ -403,28 +416,18 @@ const notification = () => {
             </View>
             <View style={styles.card}>
               <TextInput
-                placeholder="Notification Title *"
-                value={notificationTitle}
+                placeholder="Notification Type *"
+                value={notificationType}
                 onChangeText={setNotificationType}
               />
             </View>
             {classes && (
               <View style={styles.card}>
                 <Text>Class *</Text>
-                <RNPickerSelect
-                  placeholder={{ label: "Select classes...", value: null }}
-                  items={classes}
-                  onValueChange={(value) => {
-                    setSelectedClass(value)
-                    console.log(`selected classes`);
-                    console.log(selectedClass);
-                    
-                    
-                  }}
-                  value={selectedClass}
-                  multiSelect={true}
-                  useNativeAndroidPickerStyle={false}
-                  style={pickerSelectStyles}
+                <SelectMultiple
+                items={classes}
+                selectedItems={selectedClass}
+                onSelectionsChange={onClassChange}
                 />
                 
               </View>
